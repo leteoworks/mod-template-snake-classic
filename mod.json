@@ -1,0 +1,43 @@
+{
+  "manifestVersion": 1,
+  "id": "your.cool-mod",
+  "version": "0.1.0",
+  "target": {
+    "gameId": "snake-classic",
+    "gameVersion": "^2.0.0"
+  },
+  "engine": {
+    "preferred": "quickjs-declarative-ui",
+    "fallbacks": ["quickjs"]
+  },
+  "requires": {
+    "hostApi": "^1.0.0"
+  },
+  "entry": "dist/mod.js",
+  "permissions": [
+    {
+      "type": "settings-ui",
+      "maxTabs": 1,
+      "rationale": "Anade un tab a Settings con tus opciones"
+    },
+    {
+      "type": "events",
+      "subscribe": ["GAME_STARTED"],
+      "rationale": "Reacciona al inicio de partida"
+    },
+    {
+      "type": "storage",
+      "quotaKb": 32,
+      "rationale": "Persiste preferencias del jugador entre sesiones"
+    }
+  ],
+  "metadata": {
+    "name": "Your Cool Mod",
+    "description": "Reemplaza este texto por una descripcion clara de que hace tu mod.",
+    "author": "Your Name",
+    "homepage": "https://github.com/your-username/your-cool-mod",
+    "license": "MIT",
+    "tags": ["Customization"],
+    "icon": "assets/icon.png"
+  }
+}

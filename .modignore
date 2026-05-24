@@ -1,0 +1,17 @@
+# Patrones adicionales a excluir del .zip antes de subir a Workshop.
+# Formato: una línea por patrón estilo gitignore (sin negaciones).
+#
+# Los patrones canónicos (.env, node_modules, .git, .DS_Store,
+# src/, package*.json, lockfiles, *.pem/key/crt) ya están aplicados
+# por defecto en scripts/pack.mjs. Esta lista es ADICIONAL.
+#
+# Si tu mod tiene assets de trabajo (PSDs, dev notes, etc.) que no
+# quieres shipear, listalos aquí.
+
+# Ejemplos típicos:
+# assets/*.psd
+# assets/raw/
+# notes/
+# *.tmp
+# .vscode/
+# .idea/

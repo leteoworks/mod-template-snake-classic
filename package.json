@@ -1,0 +1,29 @@
+{
+  "name": "mod-template-snake-classic",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Template oficial para crear mods de Snake Classic — esbuild + sideload + Workshop pack.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "build:release": "node build.mjs --minify",
+    "dev": "node build.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "pack": "node scripts/pack.mjs",
+    "sideload": "node scripts/sideload.mjs",
+    "validate": "node scripts/validate.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "typescript": "^5.7.0",
+    "zod": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leteoworks/mod-template-snake-classic.git"
+  }
+}

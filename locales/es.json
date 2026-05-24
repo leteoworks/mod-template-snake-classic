@@ -1,0 +1,5 @@
+{
+  "tab.title": "Tu Mod Genial",
+  "tab.intro": "Este es el tab de tu mod. Edita src/settings-tab.ts para añadir tus propios controles.",
+  "toggle.enable": "Activar funcionalidad"
+}

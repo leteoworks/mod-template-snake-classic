@@ -1,0 +1,5 @@
+{
+  "tab.title": "Your Cool Mod",
+  "tab.intro": "This is your mod's settings tab. Edit src/settings-tab.ts to add your own controls.",
+  "toggle.enable": "Enable mod functionality"
+}
