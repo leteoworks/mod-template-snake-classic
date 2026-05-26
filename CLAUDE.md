@@ -54,6 +54,21 @@ External mod for a game in the **my-game-fw** framework
    `'FOO'` to the `subscribe[]` of the `events` permission. If
    you add `host.callHostFn('barFn', ...)`, also add the
    corresponding surface to the `game-specific` permission.
+
+   **Security release 2026-05 (F21+F29)**: each host fn associated
+   with a surface (e.g. `togglePowerUp` → `powerups.toggle`)
+   requires the SPECIFIC `action` declared in
+   `permissions[].actions[]`. Top-level permission is no longer
+   enough. If the framework returns `PERMISSION_DENIED` with
+   "requiere granted.<surface>.<action> que el manifest no
+   declaró", add the action mentioned to your manifest.
+
+   Mapping examples for Snake Classic:
+   - `togglePowerUp` → `{ type: 'powerups', actions: ['toggle'] }`
+   - `setPowerUpSpawnChance` → `actions: ['tuneProbabilities']`
+   - Tunables via `gameConfigSet(name)` → `{ type: 'game-specific',
+     surface: '<surfaceId>', actions: ['set'] }` (consult the
+     game's host-api-changelog for `surfaceId`).
 5. **Do not invent event or host-fn names**. The source of truth
    is the target game's `api-reference.md`. Common Snake Classic
    events: `GAME_STARTED`, `GAME_OVER`, `SCORE_CHANGED`,
@@ -95,6 +110,36 @@ External mod for a game in the **my-game-fw** framework
   switch on `sampling-throttling-activated`, self-check at end
   of setup with `host.diagnostics.getRegisteredHooks()`. See
   [cookbook §11–§14](https://leteoworks.github.io/mod-portal-snake-classic/cookbook).
+
+  **2026-05 update (F38)**: there is now an aggregate
+  rate-limit shared across ALL active mods (~10× per-mod
+  default). You may receive `rate-limit-hit` even without
+  exceeding your own per-mod cap when many mods are active —
+  treat the same way (backoff with `retryAfterMs`).
+
+  **2026-05 update (F46)**: if your `onLimitHit` callback throws
+  ≥5 times, the framework logs `[mod:<id>] host.diagnostics
+  .onLimitHit callback está throwing` to console (rate-limited
+  1/min). Fix your handler when you see this.
+
+- **Never mutate `payload` received in `subscribeEvent` callback**
+  (2026-05 update F37). When 2+ mods subscribe to the same
+  event, the framework deep-freezes the payload to prevent
+  cross-mod mutation. Attempting `payload.score = 999` throws
+  `TypeError`. If you need to modify the data, make a local copy:
+  ```ts
+  host.subscribeEvent('GAME_OVER', (payload) => {
+    const my = JSON.parse(JSON.stringify(payload));
+    my.adjustedScore = my.score * 2;  // ok — mutating local copy
+  });
+  ```
+
+- **Don't assume `engine.preferred` is the engine you got**
+  (2026-05 update F02). The game's policy decides the order of
+  engine selection from your manifest's accepted set. Use
+  `host.api.engineId` runtime to branch behavior per engine if
+  needed — `preferred` only says "I accept this", not "I will
+  receive this".
 
 ## Before any change
 

@@ -16,6 +16,51 @@
  * El mod oficial "Fun Config" en
  * src/games/snake-classic/mods/bundled/studio.fun-config/ del
  * monorepo del framework sirve como ejemplo vivo + SDK reference.
+ *
+ * ============================================================
+ * IMPORTANTE — Permission actions (release seguridad 2026-05)
+ * ============================================================
+ * Cada `host.callHostFn(name, args)` que invoque una host fn
+ * asociada a un surface requiere el `action` específico en
+ * `mod.json` → `permissions[].actions[]`. Si llamas una host fn
+ * sin el action declarado, el framework devuelve:
+ *
+ *   { ok: false, error: { code: 'PERMISSION_DENIED', message:
+ *     "host fn 'X' requiere granted.<surface>.<action> que el
+ *      manifest no declaró." }}
+ *
+ * Ejemplos para Snake Classic:
+ *
+ *   // togglePowerUp requiere actions: ['toggle'] en `powerups`:
+ *   { type: 'powerups', actions: ['toggle'],
+ *     rationale: 'Activa el modo speedrun' }
+ *
+ *   // setPowerUpSpawnChance requiere actions: ['tuneProbabilities']:
+ *   { type: 'powerups', actions: ['toggle', 'tuneProbabilities'],
+ *     rationale: '...' }
+ *
+ *   // Tunables específicos (snake-specific surface):
+ *   { type: 'game-specific', surface: 'speedCurve',
+ *     actions: ['setBase'], rationale: '...' }
+ *
+ * Catálogo completo:
+ * docs/games/snake-classic/host-api-changelog.md
+ *
+ * Host fns SIN action declarado (utilidades framework-level)
+ * NO requieren grant específico: gameConfigSet, gameConfigReset,
+ * gameConfigSnapshot.
+ * ============================================================
+ *
+ * Buena práctica — `host.diagnostics.onLimitHit(cb)`:
+ * registra UNA vez al setup. El framework te avisa cuando algo
+ * te capa silente (cap excedido, throttling, etc.). Si tu cb
+ * throws ≥5 veces, ves `console.warn [mod:<id>]` al log.
+ *
+ * Buena práctica — `subscribeEvent(name, cb)`:
+ * el payload recibido NO debe mutarse. Cuando hay 2+ mods
+ * suscritos al mismo evento, el framework deep-freeze el payload
+ * para evitar mutación cross-mod. Si necesitas mutar, hace una
+ * copia local: `const my = JSON.parse(JSON.stringify(payload))`.
  */
 
 /// <reference path="./globals.d.ts" />
