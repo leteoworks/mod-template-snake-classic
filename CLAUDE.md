@@ -86,6 +86,15 @@ External mod for a game in the **my-game-fw** framework
 - **max-len 80** in imports (split multi-line if they exceed).
 - **No obvious comments**. Only comment the "why" when the
   "what" isn't trivial from code.
+- **Robustness against framework limits**. The framework
+  applies per-mod rate-limits, hook caps, sampling auto-
+  throttling, and storage quotas. A robust mod registers
+  `host.diagnostics.onLimitHit(cb)` ONCE at setup and handles
+  each event type in a `switch`. Bare minimum: a `host.log.warn`
+  per event. Recommended: backoff on `rate-limit-hit`, mode
+  switch on `sampling-throttling-activated`, self-check at end
+  of setup with `host.diagnostics.getRegisteredHooks()`. See
+  [cookbook §11–§14](https://leteoworks.github.io/mod-portal-snake-classic/cookbook).
 
 ## Before any change
 
@@ -127,6 +136,7 @@ touches locales: verify that the keys in code exist in both
 | Preparing release to Workshop | [tutorial/05-release-ready](https://leteoworks.github.io/mod-portal-snake-classic/tutorial/05-release-ready) — i18n, icon, validate, pack, upload. |
 | Solving a concrete problem | [cookbook](https://leteoworks.github.io/mod-portal-snake-classic/cookbook) — 10 copy-paste recipes. |
 | Something not working, don't know why | [troubleshooting](https://leteoworks.github.io/mod-portal-snake-classic/troubleshooting) — symptom→fix table. |
+| Mod silently rejected, rate-limited, or throttled | [troubleshooting §10](https://leteoworks.github.io/mod-portal-snake-classic/troubleshooting) + [cookbook §11-§14](https://leteoworks.github.io/mod-portal-snake-classic/cookbook) — `host.diagnostics.onLimitHit(cb)` is THE single channel for ALL limit events. |
 | Detail of a permission or `mod.json` field | [manifest-format](https://leteoworks.github.io/mod-portal-snake-classic/manifest-format). |
 | Knowing which `host.*` is available | [api-reference](https://leteoworks.github.io/mod-portal-snake-classic/api-reference). |
 | Your mod should work in ≥1 framework game | [targeting-games](https://leteoworks.github.io/mod-portal-snake-classic/targeting-games) — logical `gameId` vs AppID. |
