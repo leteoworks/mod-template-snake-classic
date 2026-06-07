@@ -1,0 +1,21 @@
+# Añade automáticamente toda issue nueva (o reabierta) al project
+# del framework. Equivalente scriptable del workflow built-in
+# "Auto-add" de Projects v2 (que no es configurable por API).
+#
+# Requisitos (los configura `pnpm projects:setup`):
+#  - Variable de Actions GAMEFW_PROJECT_URL (URL del project).
+#  - Secret ADD_TO_PROJECT_PAT: PAT clásico con scopes
+#    `project` + `repo` (el GITHUB_TOKEN por defecto no puede
+#    escribir en projects de organización).
+name: add-to-project
+on:
+  issues:
+    types: [opened, reopened]
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: ${{ vars.GAMEFW_PROJECT_URL }}
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
