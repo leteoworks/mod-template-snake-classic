@@ -16,8 +16,12 @@ import { z } from 'zod';
 
 const semverStrictRegex =
   /^[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.-]+)?$/i;
+// Rangos que el loader del juego ENTIENDE (`semverSatisfies` del
+// framework: exacto, `^`, `~` y `>=`). Antes se aceptaba cualquier
+// mezcla de `~^>=<` (`<2.0.0`, `^~1.0.0`…): el manifest pasaba esta
+// validación y el juego lo marcaba `incompatible` al cargar, sin más.
 const semverRangeRegex =
-  /^[~^>=<]*[0-9]+\.[0-9]+\.[0-9]+(-[a-z0-9.-]+)?$/i;
+  /^(\^|~|>=)?[0-9]+\.[0-9]+\.[0-9]+(-[0-9a-z.-]+)?$/i;
 const modIdRegex =
   /^[a-z0-9][a-z0-9-]*\.[a-z0-9][a-z0-9-]*(\.[a-z0-9][a-z0-9-]*)?$/;
 

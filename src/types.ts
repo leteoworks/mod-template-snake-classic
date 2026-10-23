@@ -4,7 +4,10 @@
  * para que el mod sea standalone (no depende del runtime para
  * typechecking) y para que el bundle final sea autocontenido.
  *
- * Compatible con `requires.hostApi: ^1.0.0`.
+ * Compatible con `requires.hostApi: ^2.0.0` (Host API 2.0.0 de Snake
+ * Classic). Este subset no incluye `renderFx` ni su frame: si tu mod
+ * pinta un FX, pinta por `fx.renderer`; `fx.ctx`, `fx.pixelate`,
+ * `helpers.ringBurst` y `helpers.radialLight` ya no existen en 2.0.0.
  *
  * `host` viene como global ambient (ver globals.d.ts). NO importar
  * `host` desde aqui.
